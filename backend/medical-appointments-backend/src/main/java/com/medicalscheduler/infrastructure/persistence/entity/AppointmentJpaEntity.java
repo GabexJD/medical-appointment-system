@@ -1,5 +1,6 @@
 package com.medicalscheduler.infrastructure.persistence.entity;
 
+import com.medicalscheduler.domain.entity.AppointmentStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -29,8 +30,9 @@ public class AppointmentJpaEntity {
     @Column(name = "appointmentTime", nullable = false)
     private LocalTime appointmentTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private String status;
+    private AppointmentStatus status;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
@@ -38,7 +40,7 @@ public class AppointmentJpaEntity {
     @PrePersist
     protected void onCreate() {
         if (status == null) {
-            status = "PENDING";
+            status = AppointmentStatus.PENDING;
         }
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
@@ -85,11 +87,11 @@ public class AppointmentJpaEntity {
         this.appointmentTime = appointmentTime;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

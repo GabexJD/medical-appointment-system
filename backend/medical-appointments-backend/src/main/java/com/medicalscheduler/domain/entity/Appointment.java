@@ -12,13 +12,13 @@ public class Appointment {
     private Doctor doctor;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
-    private String status;
+    private AppointmentStatus status;
     private LocalDateTime createdAt;
 
     public Appointment() {
     }
 
-    public Appointment(Integer id, User user, Doctor doctor, LocalDate appointmentDate, LocalTime appointmentTime, String status, LocalDateTime createdAt) {
+    public Appointment(Integer id, User user, Doctor doctor, LocalDate appointmentDate, LocalTime appointmentTime, AppointmentStatus status, LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.doctor = doctor;
@@ -68,11 +68,11 @@ public class Appointment {
         this.appointmentTime = appointmentTime;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

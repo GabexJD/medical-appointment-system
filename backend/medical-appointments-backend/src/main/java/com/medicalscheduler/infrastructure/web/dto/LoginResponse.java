@@ -6,7 +6,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class LoginResponse {
 
     @Schema(description = "Unique identifier of the authenticated user", example = "1")
-    private Integer userId;
+    private Integer id;
 
     @Schema(description = "Full name of the authenticated user", example = "Jane Doe")
     private String fullName;
@@ -14,17 +14,17 @@ public class LoginResponse {
     public LoginResponse() {
     }
 
-    public LoginResponse(Integer userId, String fullName) {
-        this.userId = userId;
+    public LoginResponse(Integer id, String fullName) {
+        this.id = id;
         this.fullName = fullName;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFullName() {

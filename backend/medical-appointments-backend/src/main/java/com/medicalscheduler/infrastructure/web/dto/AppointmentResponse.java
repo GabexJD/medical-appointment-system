@@ -1,5 +1,6 @@
 package com.medicalscheduler.infrastructure.web.dto;
 
+import com.medicalscheduler.domain.entity.AppointmentStatus;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class AppointmentResponse {
     private LocalTime appointmentTime;
 
     @Schema(description = "Current status of the appointment", example = "PENDING")
-    private String status;
+    private AppointmentStatus status;
 
     @Schema(description = "Timestamp when the appointment was created", example = "2026-06-12T10:30:00")
     private LocalDateTime createdAt;
@@ -114,11 +115,11 @@ public class AppointmentResponse {
         this.appointmentTime = appointmentTime;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

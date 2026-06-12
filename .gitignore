@@ -1,23 +1,30 @@
-# Frontend (React + Vite)
+# Frontend (React)
 frontend/node_modules/
 frontend/dist/
 frontend/.env
 frontend/.vite/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
 
 # Backend (Quarkus)
 backend/target/
 backend/quarkus-app/
 backend/*.log
 backend/.mvn/wrapper/maven-wrapper.jar
+backend/.live_reload_lock
 
-# Docker
+# Docker & Base de Datos
 docker/mysql/data/
 docker/mysql/*.log
+.docker-volumes/
 
-# General
-.env
-*.log
-.DS_Store
-*.iml
+# IDEs y Editores de codigo
 .idea/
-.vscode/settings.json
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+.env

@@ -3,8 +3,8 @@ package com.medicalscheduler.service;
 import com.medicalscheduler.domain.entity.Doctor;
 import com.medicalscheduler.domain.entity.Specialty;
 import com.medicalscheduler.domain.repository.DoctorRepository;
-import com.medicalscheduler.domain.repository.ScheduleRepository;
 import com.medicalscheduler.domain.repository.SpecialtyRepository;
+import com.medicalscheduler.infrastructure.web.dto.AvailabilityResponse;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyRequest;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyResponse;
 import com.medicalscheduler.infrastructure.web.mapper.SpecialtyMapper;
@@ -27,7 +27,7 @@ public class SpecialtyService {
     DoctorRepository doctorRepository;
 
     @Inject
-    ScheduleRepository scheduleRepository;
+    ScheduleService scheduleService;
 
     @Inject
     SpecialtyMapper mapper;
@@ -81,6 +81,9 @@ public class SpecialtyService {
 
     private boolean hasAvailableSlots(Integer specialtyId) {
         List<Doctor> doctors = doctorRepository.findBySpecialtyId(specialtyId);
-        return doctors.stream().anyMatch(d -> scheduleRepository.existsActiveByDoctorId(d.getId()));
+        return doctors.stream().anyMatch(d -> {
+            AvailabilityResponse availability = scheduleService.getAvailability(d.getId());
+            return availability.getAvailableSlots() != null && !availability.getAvailableSlots().isEmpty();
+        });
     }
 }

@@ -17,13 +17,17 @@ public class TimeSlot {
     @Schema(description = "Start time of the slot", example = "09:00")
     private LocalTime time;
 
+    @Schema(description = "Indicates if the slot is free for booking", example = "true")
+    private boolean available;
+
     public TimeSlot() {
     }
 
-    public TimeSlot(LocalDate date, String dayOfWeek, LocalTime time) {
+    public TimeSlot(LocalDate date, String dayOfWeek, LocalTime time, boolean available) {
         this.date = date;
         this.dayOfWeek = dayOfWeek;
         this.time = time;
+        this.available = available;
     }
 
     public LocalDate getDate() {
@@ -48,5 +52,13 @@ public class TimeSlot {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

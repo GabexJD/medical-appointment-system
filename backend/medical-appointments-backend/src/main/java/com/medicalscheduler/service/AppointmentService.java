@@ -1,6 +1,7 @@
 package com.medicalscheduler.service;
 
 import com.medicalscheduler.domain.entity.Appointment;
+import com.medicalscheduler.domain.entity.AppointmentStatus;
 import com.medicalscheduler.domain.entity.Doctor;
 import com.medicalscheduler.domain.entity.User;
 import com.medicalscheduler.domain.repository.AppointmentRepository;
@@ -57,7 +58,7 @@ public class AppointmentService {
         boolean conflictingSpecialty = userAppointments.stream()
                 .anyMatch(a -> a.getDoctor().getSpecialty().getId()
                         .equals(doctor.getSpecialty().getId())
-                        && !"CANCELLED".equals(a.getStatus()));
+                        && a.getStatus() != AppointmentStatus.CANCELLED);
 
         if (conflictingSpecialty) {
             throw new WebApplicationException(
@@ -78,7 +79,7 @@ public class AppointmentService {
         Appointment appointment = mapper.toDomain(request);
         appointment.setUser(user);
         appointment.setDoctor(doctor);
-        appointment.setStatus("PENDING");
+        appointment.setStatus(AppointmentStatus.PENDING);
         appointment = appointmentRepository.save(appointment);
         return mapper.toResponse(appointment);
     }

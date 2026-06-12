@@ -1,11 +1,11 @@
 -- =============================================
--- Inicialización Base de Datos - Citas Médicas
+-- Inicializacion Base de Datos - Citas Medicas
 -- =============================================
 
 USE citas_medicas;
 
 -- ======================
--- CREACIÓN DE TABLAS
+-- CREACION DE TABLAS
 -- ======================
 
 CREATE TABLE IF NOT EXISTS Specialty (
@@ -63,12 +63,12 @@ CREATE TABLE IF NOT EXISTS Appointment (
 -- ESPECIALIDADES
 -- ======================
 INSERT INTO Specialty (name, description) VALUES
-('Cardiología', 'Enfermedades del corazón y sistema circulatorio'),
-('Pediatría', 'Atención médica a niños y adolescentes'),
-('Dermatología', 'Enfermedades de la piel'),
-('Ginecología', 'Salud reproductiva femenina'),
-('Neurología', 'Enfermedades del sistema nervioso'),
-('Oftalmología', 'Salud visual y ojos'),
+('Cardiologia', 'Enfermedades del corazon y sistema circulatorio'),
+('Pediatria', 'Atencion medica a ninos y adolescentes'),
+('Dermatologia', 'Enfermedades de la piel'),
+('Ginecologia', 'Salud reproductiva femenina'),
+('Neurologia', 'Enfermedades del sistema nervioso'),
+('Oftalmologia', 'Salud visual y ojos'),
 ('Ortopedia', 'Lesiones y enfermedades del aparato locomotor')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
 
@@ -77,8 +77,8 @@ ON DUPLICATE KEY UPDATE name = VALUES(name);
 -- ======================
 INSERT INTO Doctor (fullName, specialtyId, phone, email, experienceYears, rating, isActive) VALUES
 ('Dr. Carlos Mendoza', 1, '0987654321', 'carlos.mendoza@email.com', 12, 4.8, true),
-('Dra. Laura Rodríguez', 2, '0987654322', 'laura.rodriguez@email.com', 8, 4.9, true),
-('Dr. Andrés Vargas', 3, '0987654323', 'andres.vargas@email.com', 15, 4.7, true),
+('Dra. Laura Rodriguez', 2, '0987654322', 'laura.rodriguez@email.com', 8, 4.9, true),
+('Dr. Andres Vargas', 3, '0987654323', 'andres.vargas@email.com', 15, 4.7, true),
 ('Dra. Sofia Morales', 4, '0987654324', 'sofia.morales@email.com', 10, 4.6, true),
 ('Dr. Miguel Torres', 5, '0987654325', 'miguel.torres@email.com', 9, 4.5, true),
 ('Dra. Camila Ruiz', 6, '0987654326', 'camila.ruiz@email.com', 7, 4.8, true),
@@ -89,16 +89,16 @@ ON DUPLICATE KEY UPDATE fullName = VALUES(fullName);
 -- HORARIOS RECURRENTES (Schedule)
 -- ======================
 INSERT INTO Schedule (doctorId, dayOfWeek, startTime, endTime, slotDuration, isActive) VALUES
--- Doctor 1 (Cardiología) - Lunes y Miércoles
+-- Doctor 1 (Cardiologia) - Lunes y Miercoles
 (1, 'MONDAY', '08:00', '12:00', 30, true),
 (1, 'MONDAY', '14:00', '18:00', 30, true),
 (1, 'WEDNESDAY', '08:00', '12:00', 30, true),
 
--- Doctor 2 (Pediatría)
+-- Doctor 2 (Pediatria)
 (2, 'TUESDAY', '09:00', '13:00', 30, true),
 (2, 'TUESDAY', '15:00', '19:00', 30, true),
 
--- Doctor 3 (Dermatología)
+-- Doctor 3 (Dermatologia)
 (3, 'MONDAY', '08:00', '13:00', 30, true),
 (3, 'FRIDAY', '14:00', '18:00', 30, true)
 

@@ -76,9 +76,8 @@ public class ScheduleService {
                 LocalTime slotTime = schedule.getStartTime();
                 while (slotTime.isBefore(schedule.getEndTime())) {
                     boolean isPast = date.isEqual(today) && !slotTime.isAfter(LocalTime.now());
-                    if (!isPast && !bookedTimes.contains(slotTime)) {
-                        availableSlots.add(new TimeSlot(date, dayName, slotTime));
-                    }
+                    boolean isSlotFree = !isPast && !bookedTimes.contains(slotTime);
+                    availableSlots.add(new TimeSlot(date, dayName, slotTime, isSlotFree));
                     slotTime = slotTime.plusMinutes(15);
                 }
             }
