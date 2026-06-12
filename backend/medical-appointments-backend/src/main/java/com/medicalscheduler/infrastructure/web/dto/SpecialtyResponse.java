@@ -14,6 +14,9 @@ public class SpecialtyResponse {
     @Schema(description = "Description of the medical specialty", example = "Diagnosis and treatment of heart diseases")
     private String description;
 
+    @Schema(description = "Indicates whether this specialty has at least one doctor with active available schedules", example = "true")
+    private boolean hasAvailableSlots;
+
     public Integer getId() {
         return id;
     }
@@ -36,5 +39,13 @@ public class SpecialtyResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isHasAvailableSlots() {
+        return hasAvailableSlots;
+    }
+
+    public void setHasAvailableSlots(boolean hasAvailableSlots) {
+        this.hasAvailableSlots = hasAvailableSlots;
     }
 }

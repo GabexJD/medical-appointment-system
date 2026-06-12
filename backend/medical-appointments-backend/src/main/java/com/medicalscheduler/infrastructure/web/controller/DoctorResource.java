@@ -1,8 +1,10 @@
 package com.medicalscheduler.infrastructure.web.controller;
 
+import com.medicalscheduler.infrastructure.web.dto.AvailabilityResponse;
 import com.medicalscheduler.infrastructure.web.dto.DoctorRequest;
 import com.medicalscheduler.infrastructure.web.dto.DoctorResponse;
 import com.medicalscheduler.service.DoctorService;
+import com.medicalscheduler.service.ScheduleService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -25,6 +27,9 @@ public class DoctorResource {
 
     @Inject
     DoctorService service;
+
+    @Inject
+    ScheduleService scheduleService;
 
     @GET
     @Operation(summary = "List all doctors", description = "Returns a list of all registered doctors")
@@ -73,6 +78,19 @@ public class DoctorResource {
     })
     public DoctorResponse update(@PathParam("id") Integer id, @Valid DoctorRequest request) {
         return service.update(id, request);
+    }
+
+    @GET
+    @Path("/{id}/availability")
+    @Operation(summary = "Get doctor availability", description = "Returns available 15-minute time slots for the next 6 business days based on the doctor's recurring schedule")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Availability retrieved successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(implementation = AvailabilityResponse.class))),
+            @APIResponse(responseCode = "404", description = "Doctor not found")
+    })
+    public AvailabilityResponse getAvailability(@PathParam("id") Integer id) {
+        return scheduleService.getAvailability(id);
     }
 
     @DELETE

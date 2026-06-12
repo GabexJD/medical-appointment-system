@@ -1,6 +1,9 @@
 package com.medicalscheduler.service;
 
+import com.medicalscheduler.domain.entity.Doctor;
 import com.medicalscheduler.domain.entity.Specialty;
+import com.medicalscheduler.domain.repository.DoctorRepository;
+import com.medicalscheduler.domain.repository.ScheduleRepository;
 import com.medicalscheduler.domain.repository.SpecialtyRepository;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyRequest;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyResponse;
@@ -21,24 +24,41 @@ public class SpecialtyService {
     SpecialtyRepository repository;
 
     @Inject
+    DoctorRepository doctorRepository;
+
+    @Inject
+    ScheduleRepository scheduleRepository;
+
+    @Inject
     SpecialtyMapper mapper;
 
     public List<SpecialtyResponse> findAll() {
-        return repository.findAll().stream()
-                .map(mapper::toResponse)
+        List<Specialty> specialties = repository.findAll();
+        return specialties.stream()
+                .map(specialty -> {
+                    SpecialtyResponse response = mapper.toResponse(specialty);
+                    response.setHasAvailableSlots(hasAvailableSlots(specialty.getId()));
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
 
     public SpecialtyResponse findById(Integer id) {
         return repository.findById(id)
-                .map(mapper::toResponse)
+                .map(specialty -> {
+                    SpecialtyResponse response = mapper.toResponse(specialty);
+                    response.setHasAvailableSlots(hasAvailableSlots(specialty.getId()));
+                    return response;
+                })
                 .orElseThrow(() -> new NotFoundException("Specialty not found with id: " + id));
     }
 
     public SpecialtyResponse create(SpecialtyRequest request) {
         Specialty specialty = mapper.toDomain(request);
         specialty = repository.save(specialty);
-        return mapper.toResponse(specialty);
+        SpecialtyResponse response = mapper.toResponse(specialty);
+        response.setHasAvailableSlots(hasAvailableSlots(specialty.getId()));
+        return response;
     }
 
     public SpecialtyResponse update(Integer id, SpecialtyRequest request) {
@@ -47,7 +67,9 @@ public class SpecialtyService {
         existing.setName(request.getName());
         existing.setDescription(request.getDescription());
         existing = repository.save(existing);
-        return mapper.toResponse(existing);
+        SpecialtyResponse response = mapper.toResponse(existing);
+        response.setHasAvailableSlots(hasAvailableSlots(existing.getId()));
+        return response;
     }
 
     public void delete(Integer id) {
@@ -55,5 +77,10 @@ public class SpecialtyService {
             throw new NotFoundException("Specialty not found with id: " + id);
         }
         repository.deleteById(id);
+    }
+
+    private boolean hasAvailableSlots(Integer specialtyId) {
+        List<Doctor> doctors = doctorRepository.findBySpecialtyId(specialtyId);
+        return doctors.stream().anyMatch(d -> scheduleRepository.existsActiveByDoctorId(d.getId()));
     }
 }

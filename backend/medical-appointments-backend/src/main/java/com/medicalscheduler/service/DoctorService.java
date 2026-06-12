@@ -28,6 +28,14 @@ public class DoctorService {
     @Inject
     DoctorMapper mapper;
 
+    public List<DoctorResponse> findBySpecialtyId(Integer specialtyId) {
+        specialtyRepository.findById(specialtyId)
+                .orElseThrow(() -> new NotFoundException("Specialty not found with id: " + specialtyId));
+        return doctorRepository.findBySpecialtyId(specialtyId).stream()
+                .map(mapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     public List<DoctorResponse> findAll() {
         return doctorRepository.findAll().stream()
                 .map(mapper::toResponse)

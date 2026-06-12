@@ -41,6 +41,16 @@ public class DoctorPanacheRepository implements DoctorRepository {
     }
 
     @Override
+    public List<Doctor> findBySpecialtyId(Integer specialtyId) {
+        return entityManager.createQuery(
+                "SELECT d FROM DoctorJpaEntity d WHERE d.specialty.id = :specialtyId", DoctorJpaEntity.class)
+                .setParameter("specialtyId", specialtyId)
+                .getResultStream()
+                .map(mapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Doctor> findAll() {
         return entityManager.createQuery("SELECT d FROM DoctorJpaEntity d", DoctorJpaEntity.class)
                 .getResultStream()

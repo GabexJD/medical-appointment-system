@@ -11,6 +11,8 @@ public interface DoctorRepository {
 
     Optional<Doctor> findById(Integer id);
 
+    List<Doctor> findBySpecialtyId(Integer specialtyId);
+
     List<Doctor> findAll();
 
     void deleteById(Integer id);

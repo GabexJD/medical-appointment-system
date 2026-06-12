@@ -1,7 +1,9 @@
 package com.medicalscheduler.infrastructure.web.controller;
 
+import com.medicalscheduler.infrastructure.web.dto.DoctorResponse;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyRequest;
 import com.medicalscheduler.infrastructure.web.dto.SpecialtyResponse;
+import com.medicalscheduler.service.DoctorService;
 import com.medicalscheduler.service.SpecialtyService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -24,15 +26,31 @@ import java.util.List;
 public class SpecialtyResource {
 
     @Inject
-    SpecialtyService service;
+    SpecialtyService specialtyService;
+
+    @Inject
+    DoctorService doctorService;
 
     @GET
-    @Operation(summary = "List all specialties", description = "Returns a list of all registered medical specialties")
+    @Operation(summary = "List all specialties", description = "Returns all medical specialties. Each specialty includes a flag indicating whether it has available doctors with active schedules")
     @APIResponse(responseCode = "200", description = "List of specialties retrieved successfully",
             content = @Content(mediaType = MediaType.APPLICATION_JSON,
                     schema = @Schema(implementation = SpecialtyResponse.class)))
     public List<SpecialtyResponse> findAll() {
-        return service.findAll();
+        return specialtyService.findAll();
+    }
+
+    @GET
+    @Path("/{specialtyId}/doctors")
+    @Operation(summary = "List doctors by specialty", description = "Returns all doctors that belong to a given medical specialty")
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "Doctors retrieved successfully",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                            schema = @Schema(implementation = DoctorResponse.class))),
+            @APIResponse(responseCode = "404", description = "Specialty not found")
+    })
+    public List<DoctorResponse> findDoctorsBySpecialty(@PathParam("specialtyId") Integer specialtyId) {
+        return doctorService.findBySpecialtyId(specialtyId);
     }
 
     @GET
@@ -45,7 +63,7 @@ public class SpecialtyResource {
             @APIResponse(responseCode = "404", description = "Specialty not found")
     })
     public SpecialtyResponse findById(@PathParam("id") Integer id) {
-        return service.findById(id);
+        return specialtyService.findById(id);
     }
 
     @POST
@@ -57,7 +75,7 @@ public class SpecialtyResource {
             @APIResponse(responseCode = "400", description = "Invalid input data")
     })
     public Response create(@Valid SpecialtyRequest request) {
-        SpecialtyResponse response = service.create(request);
+        SpecialtyResponse response = specialtyService.create(request);
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
@@ -72,7 +90,7 @@ public class SpecialtyResource {
             @APIResponse(responseCode = "404", description = "Specialty not found")
     })
     public SpecialtyResponse update(@PathParam("id") Integer id, @Valid SpecialtyRequest request) {
-        return service.update(id, request);
+        return specialtyService.update(id, request);
     }
 
     @DELETE
@@ -83,7 +101,7 @@ public class SpecialtyResource {
             @APIResponse(responseCode = "404", description = "Specialty not found")
     })
     public Response delete(@PathParam("id") Integer id) {
-        service.delete(id);
+        specialtyService.delete(id);
         return Response.noContent().build();
     }
 }
