@@ -1,0 +1,23 @@
+# Frontend (React + Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.vite/
+
+# Backend (Quarkus)
+backend/target/
+backend/quarkus-app/
+backend/*.log
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Docker
+docker/mysql/data/
+docker/mysql/*.log
+
+# General
+.env
+*.log
+.DS_Store
+*.iml
+.idea/
+.vscode/settings.json
